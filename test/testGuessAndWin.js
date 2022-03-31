@@ -29,7 +29,7 @@ contract('GuessAndWin', function(accounts){
             expect(bool).to.be.ok;
         });
         it('should revert if user has already try', async function(){
-            await this.cInstance.proposeWord('coucou', {from:owner, value:(1*10*18)});
+            await this.cInstance.proposeWord('coucou', {from:owner, value:(1*10**18)});
             await expectRevert(this.cInstance.proposeWord('coucou', {from:owner, value:(1*10*18)}), "Sorry, you already got your chance");
         })
     })

@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/access/Ownable.sol';
 contract GuessAndWin is Ownable{
     string public hint; 
     string private word; //word to find
-    mapping(address => uint) HasTried; // HasTried[0] => never play, HasTried[1] tried once
+    mapping(address => uint) public HasTried; // HasTried[0] => never play, HasTried[1] tried once
     address[] private log;
     address public winner;
     constructor(string memory _hint, string memory _word) {
@@ -30,6 +30,7 @@ contract GuessAndWin is Ownable{
         if(keccak256(abi.encodePacked(tmpString)) == keccak256(abi.encodePacked(word))){
             (bool sent, ) = msg.sender.call{value: seePrize()}("");
             require(sent, "Failed to send Ether");
+            winner = msg.sender;
             restart();
             return true;
         }
@@ -43,12 +44,13 @@ contract GuessAndWin is Ownable{
         require(keccak256(abi.encodePacked(str)) != keccak256(abi.encodePacked(hintStr)), "word and hint have to be different");
         hint = hintStr;
         word = str;
+        winner = address(0);
         restart();
     }
     /*
         restart the mapping;
     */
-    function restart() internal {
+    function restart() private {
         for(uint i; i < log.length; i++){
             HasTried[log[i]] = 0;
         }

@@ -1,5 +1,7 @@
 #Tests : 
+
   Contract: GuessAndWin
+  
     ###INITIALISATION
       ✓ verify if owner is msg.sender
       ✓ should not accept to create a contract with hint == word (27237 gas)

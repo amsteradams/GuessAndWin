@@ -24,13 +24,16 @@ contract('GuessAndWin', function(accounts){
             const bool = await this.cInstance.proposeWord('test', {from:owner, value:(1*10**18)});
             expect(bool).to.be.ok;
         });
-        it('should return false when submiting the right word', async function(){
+        it('should return false when submiting the wrong word', async function(){
             const bool = await this.cInstance.proposeWord('coucou', {from:owner, value:(1*10**18)});
             expect(bool).to.be.ok;
         });
         it('should revert if user has already try', async function(){
             await this.cInstance.proposeWord('coucou', {from:owner, value:(1*10**18)});
-            await expectRevert(this.cInstance.proposeWord('coucou', {from:owner, value:(1*10*18)}), "Sorry, you already got your chance");
+            await expectRevert(this.cInstance.proposeWord('coucou', {from:owner, value:(1*10**18)}), "Sorry, you already got your chance");
         })
+        it('should revert if user dont pay at least 1 eth to play', async function(){
+            await expectRevert(this.cInstance.proposeWord('coucou', {from:owner, value:(34)}), "Pay 1 eth to try");
+        });
     })
 });
